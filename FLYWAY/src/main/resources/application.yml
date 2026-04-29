@@ -4,7 +4,7 @@ spring:
   application:
     name: usuarios
   datasource:
-    url: jdbc:mysql://localhost:3306/practica_final_backend
+    url: jdbc:mysql://localhost:3306/practica_final_backend_v2
     username: root
     password: admin
   jpa:
