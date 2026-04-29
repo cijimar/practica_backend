@@ -1,0 +1,52 @@
+package es.ediae.master.programacion.gestionusuario.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "generos")
+public class GeneroEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false, unique = true)
+    private String nombre;
+
+    // Constructor
+    public GeneroEntity(Integer id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+
+    // Constructor vacío
+    public GeneroEntity() {
+    }   
+
+
+    // Getters
+    public Integer getId() {
+        return id;
+    }   
+
+    public String getNombre() {
+        return nombre;
+    }
+
+
+    // Setters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+}
