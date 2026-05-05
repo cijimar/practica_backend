@@ -41,12 +41,6 @@ public class UsuarioService implements IUsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    @Override
-    public UsuarioEntity obtenerUsuarioPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
-    }
-
-    
     
     
 }
