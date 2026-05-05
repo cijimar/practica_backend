@@ -9,7 +9,7 @@ import es.ediae.master.programacion.gestionusuario.entity.UsuarioEntity;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
 
-    @Query("SELECT u FROM UsuarioEntity u WHERE u.email = :email")
-    UsuarioEntity findByEmail(String email);
+    @Query("SELECT u FROM UsuarioEntity u WHERE u.nickUsuario = :nickUsuario")
+    UsuarioEntity findByNickUsuario(String nickUsuario);
     
 }
