@@ -41,7 +41,7 @@ public class DireccionController {
 
     @PutMapping("/direcciones/{id}")
     public DireccionResponseDTO actualizarDireccion(@PathVariable Integer id,
-                                                    @RequestBody DireccionRequestDTO dto) {
+        @RequestBody DireccionRequestDTO dto) {
         return direccionService.actualizarDireccion(id, dto);
     }
 

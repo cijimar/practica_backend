@@ -22,7 +22,7 @@ public class DireccionService{
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-        // 🔹 CREATE
+    // CREATE
     public DireccionResponseDTO crearDireccion(DireccionRequestDTO dto) {
 
         UsuarioEntity usuario = usuarioRepository.findById(dto.getUsuarioId())
@@ -35,7 +35,7 @@ public class DireccionService{
         return DireccionResponseDTO.fromEntity(guardada);
     }
 
-    // 🔹 READ (una dirección)
+    // READ (una dirección)
     public DireccionResponseDTO obtenerDireccionPorId(Integer id) {
 
         DireccionEntity direccion = direccionRepository.findById(id)
@@ -48,7 +48,7 @@ public class DireccionService{
         return DireccionResponseDTO.fromEntity(direccion);
     }
 
-    // 🔹 READ (todas)
+    // READ (todas)
     public List<DireccionResponseDTO> obtenerTodasLasDirecciones() {
 
         List<DireccionEntity> direcciones = direccionRepository.findAll();
@@ -58,7 +58,7 @@ public class DireccionService{
                 .toList();
     }
 
-    // 🔹 UPDATE
+    // UPDATE
     public DireccionResponseDTO actualizarDireccion(Integer id, DireccionRequestDTO dto) {
 
         DireccionEntity direccion = direccionRepository.findById(id)
@@ -85,7 +85,7 @@ public class DireccionService{
         return DireccionResponseDTO.fromEntity(actualizada);
     }
 
-    // 🔹 DELETE
+    // DELETE
     public void eliminarDireccion(Integer id) {
         direccionRepository.deleteById(id);
     }

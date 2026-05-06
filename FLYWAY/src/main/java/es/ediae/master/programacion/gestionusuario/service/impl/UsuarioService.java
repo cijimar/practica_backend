@@ -1,45 +1,124 @@
 package es.ediae.master.programacion.gestionusuario.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.ediae.master.programacion.gestionusuario.dto.UsuarioRequestDTO;
+import es.ediae.master.programacion.gestionusuario.dto.UsuarioResponseDTO;
+import es.ediae.master.programacion.gestionusuario.entity.GeneroEntity;
+import es.ediae.master.programacion.gestionusuario.entity.PuestoDeTrabajoEntity;
 import es.ediae.master.programacion.gestionusuario.entity.UsuarioEntity;
+import es.ediae.master.programacion.gestionusuario.repository.GeneroRepository;
+import es.ediae.master.programacion.gestionusuario.repository.PuestoDeTrabajoRepository;
 import es.ediae.master.programacion.gestionusuario.repository.UsuarioRepository;
-import es.ediae.master.programacion.gestionusuario.service.IUsuarioService;
 
 @Service
-public class UsuarioService implements IUsuarioService {
+public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Override
-    public List<UsuarioEntity> obtenerTodosLosUsuarios() {
-        return usuarioRepository.findAll();
+    // Añado estos dos autowired 
+
+    @Autowired
+    private GeneroRepository generoRepository;
+
+    @Autowired
+    private PuestoDeTrabajoRepository puestoDeTrabajoRepository;
+    
+    // CREATE
+    public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO dto) {
+
+    UsuarioEntity usuario = new UsuarioEntity();
+
+    usuario.setNickUsuario(dto.getNickUsuario());
+    usuario.setContrasena(dto.getContrasena());
+    usuario.setFechaHoraCreacion(LocalDateTime.now());
+    usuario.setNombre(dto.getNombre());
+    usuario.setPrimerApellido(dto.getPrimerApellido());
+    usuario.setSegundoApellido(dto.getSegundoApellido());
+    usuario.setFechaNacimiento(dto.getFechaNacimiento());
+    usuario.setHoraDesayuno(dto.getHoraDesayuno());
+
+    // GENERO (obligatorio)
+    GeneroEntity genero = generoRepository.findById(dto.getGeneroId())
+        .orElseThrow(() -> new RuntimeException("Genero no encontrado"));
+
+    usuario.setGenero(genero);
+
+    // PUESTO (opcional)
+    if (dto.getPuestoDeTrabajoId() != null) {
+        PuestoDeTrabajoEntity puesto = puestoDeTrabajoRepository
+            .findById(dto.getPuestoDeTrabajoId())
+            .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
+
+        usuario.setPuestoDeTrabajo(puesto);
     }
 
-    @Override
-    public UsuarioEntity obtenerUsuarioPorId(Integer id) {
-        return usuarioRepository.findById(id).orElse(null);
-    }   
+    UsuarioEntity guardado = usuarioRepository.save(usuario);
 
-    @Override
-    public UsuarioEntity crearUsuario(UsuarioEntity usuario) {
-        return usuarioRepository.save(usuario);
+    return UsuarioResponseDTO.fromEntity(guardado);
     }
 
-    @Override
-    public UsuarioEntity actualizarUsuario(Integer id, UsuarioEntity usuario) {
-        usuario.setId(id);
-        return usuarioRepository.save(usuario);
+
+    // READ (un usuario)
+    public UsuarioResponseDTO obtenerUsuarioPorId(Integer id) {
+
+        UsuarioEntity usuario = usuarioRepository.findById(id)
+                .orElse(null);
+
+        if (usuario == null) {
+            return null;
+        }
+
+        return UsuarioResponseDTO.fromEntity(usuario);
     }
 
-    @Override
+
+    // READ (todos los usuarios)
+    public List<UsuarioResponseDTO> obtenerTodosLosUsuarios() {
+
+        List<UsuarioEntity> usuarios = usuarioRepository.findAll();
+
+        return usuarios.stream()
+                .map(UsuarioResponseDTO::fromEntity)
+                .toList();
+    }
+
+
+    // UPDATE
+    public UsuarioResponseDTO actualizarUsuario(Integer id, UsuarioRequestDTO dto) {
+
+        UsuarioEntity usuario = usuarioRepository.findById(id)
+                .orElse(null);
+
+        if (usuario == null) {
+            return null;
+        }
+
+        // Actualizar campos
+        usuario.setNickUsuario(dto.getNickUsuario());
+        usuario.setContrasena(dto.getContrasena());
+        usuario.setNombre(dto.getNombre());
+        usuario.setPrimerApellido(dto.getPrimerApellido());
+        usuario.setSegundoApellido(dto.getSegundoApellido());
+        usuario.setFechaNacimiento(dto.getFechaNacimiento());
+        usuario.setHoraDesayuno(dto.getHoraDesayuno());
+
+        UsuarioEntity actualizada = usuarioRepository.save(usuario);
+
+        return UsuarioResponseDTO.fromEntity(actualizada);
+    }
+
+    
+    // DELETE
     public void eliminarUsuario(Integer id) {
         usuarioRepository.deleteById(id);
     }
+
 
     
     

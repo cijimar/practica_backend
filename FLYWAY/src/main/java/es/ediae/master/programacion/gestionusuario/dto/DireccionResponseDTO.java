@@ -66,6 +66,7 @@ public class DireccionResponseDTO {
 
     // MÉTODO CLAVE: recibe un Entity y devuelve un ResponseDTO.
     public static DireccionResponseDTO fromEntity(DireccionEntity entity) {
+        
         DireccionResponseDTO dto = new DireccionResponseDTO();
 
         dto.setId(entity.getId());
