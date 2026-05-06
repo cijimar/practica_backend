@@ -16,6 +16,7 @@ import es.ediae.master.programacion.gestionusuario.dto.UsuarioResponseDTO;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/v1")
 public class UsuarioController {
@@ -49,6 +50,13 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
     }   
 
+    // Metodo iniciarSesion
+    @PostMapping("/login")
+    public boolean iniciarSesion(@RequestBody UsuarioRequestDTO dto) {
+        return usuarioService.iniciarSesion(dto.getNickUsuario(), dto.getContrasena());
+    }
+    
+    
 
     
 }
