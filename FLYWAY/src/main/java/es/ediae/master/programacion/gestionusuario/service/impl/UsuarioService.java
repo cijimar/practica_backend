@@ -113,12 +113,28 @@ public class UsuarioService {
         return UsuarioResponseDTO.fromEntity(actualizada);
     }
 
-    
+
     // DELETE
     public void eliminarUsuario(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
+
+    // INICIAR SESION
+    public boolean iniciarSesion(String nickUsuario, String contrasena) {
+
+    UsuarioEntity usuario = usuarioRepository.findByNickUsuario(nickUsuario);
+
+    if (usuario == null) {
+        return false;
+    }
+
+    if (!usuario.getContrasena().equals(contrasena)) {
+        return false;
+    }
+
+    return true;
+}
 
     
     

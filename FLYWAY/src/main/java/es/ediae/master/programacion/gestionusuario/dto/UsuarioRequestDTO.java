@@ -1,8 +1,6 @@
 package es.ediae.master.programacion.gestionusuario.dto;
 
-import es.ediae.master.programacion.gestionusuario.entity.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 // --> Se utiliza para POST y PUT. Define lo que el cliente puede enviar.
