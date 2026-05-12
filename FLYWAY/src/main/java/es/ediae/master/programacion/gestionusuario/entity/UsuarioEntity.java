@@ -21,6 +21,9 @@ public class UsuarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "es_administrador", nullable = false)
+    private Boolean esAdmin;
+
     @Column(name = "nick_usuario", nullable = false)
     private String nickUsuario;
 
@@ -54,9 +57,10 @@ public class UsuarioEntity {
     private PuestoDeTrabajoEntity puestoDeTrabajo;
 
     // Constructor
-    public UsuarioEntity(Integer id, String nickUsuario, String contrasena, LocalDateTime fechaHoraCreacion, GeneroEntity genero, String nombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento,
+    public UsuarioEntity(Integer id, Boolean esAdmin, String nickUsuario, String contrasena, LocalDateTime fechaHoraCreacion, GeneroEntity genero, String nombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento,
         LocalTime horaDesayuno, PuestoDeTrabajoEntity puestoDeTrabajo) {
         this.id = id;
+        this.esAdmin = esAdmin;
         this.nickUsuario = nickUsuario;
         this.contrasena = contrasena;
         this.fechaHoraCreacion = fechaHoraCreacion;
@@ -77,6 +81,10 @@ public class UsuarioEntity {
     // Getters
     public Integer getId() {
         return id;
+    }
+
+    public Boolean getEsAdmin() {
+        return esAdmin;
     }
 
     public String getNickUsuario() {
@@ -165,6 +173,9 @@ public class UsuarioEntity {
         this.puestoDeTrabajo = puestoDeTrabajo;
     }
 
+    public void setEsAdmin(Boolean esAdmin) {
+        this.esAdmin = esAdmin;
+    }
 
     
 
