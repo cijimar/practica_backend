@@ -12,5 +12,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
 
     @Query("SELECT u FROM UsuarioEntity u WHERE u.nickUsuario = :nickUsuario")
     UsuarioEntity findByNickUsuario(@Param("nickUsuario") String nickUsuario);
+
+    boolean existsByNickUsuario(String nickUsuario);
+
+    boolean existsByNickUsuarioAndIdNot(String nickUsuario, Integer id);
     
 }

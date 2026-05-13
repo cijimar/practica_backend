@@ -31,6 +31,11 @@ public class UsuarioService {
     
     // CREATE
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO dto) {
+    
+    // VALIDACION ANTES DE CREACION: el nickUsuario debe ser único
+    if (usuarioRepository.existsByNickUsuario(dto.getNickUsuario())) {
+    throw new RuntimeException("Ya existe un usuario con ese nick");
+    }
 
     UsuarioEntity usuario = new UsuarioEntity();
 
@@ -92,12 +97,18 @@ public class UsuarioService {
     // UPDATE
     public UsuarioResponseDTO actualizarUsuario(Integer id, UsuarioRequestDTO dto) {
 
-        UsuarioEntity usuario = usuarioRepository.findById(id)
-                .orElse(null);
-
+        UsuarioEntity usuario = usuarioRepository.findById(id).orElse(null);
+        
         if (usuario == null) {
             return null;
         }
+
+        // SE COMPRUEBA ANTES SI EL USUARIO EXISTE Y DESPUES SE VALIDA EL NICK: el nickUsuario debe ser único
+        if (usuarioRepository.existsByNickUsuarioAndIdNot(dto.getNickUsuario(), id)) {
+        throw new RuntimeException("Ya existe un usuario con ese nick");
+        }
+
+
 
         // Actualizar campos
         usuario.setNickUsuario(dto.getNickUsuario());
@@ -134,8 +145,6 @@ public class UsuarioService {
     }
 
     return true;
-}
-
-    
+    }    
     
 }
