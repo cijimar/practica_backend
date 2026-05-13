@@ -9,7 +9,7 @@ import es.ediae.master.programacion.gestionusuario.entity.PuestoDeTrabajoEntity;
 @Repository
 public interface PuestoDeTrabajoRepository extends JpaRepository<PuestoDeTrabajoEntity, Integer> {
 
-    @Query("SELECT p FROM PuestoDeTrabajoEntity p WHERE p.nombre = :nombre")
-    PuestoDeTrabajoEntity buscarPorNombre(String nombre);
+    @Query("SELECT p FROM PuestoDeTrabajoEntity p WHERE p.usuario.id = :usuarioId")
+    PuestoDeTrabajoEntity buscarPorUsuarioId(Integer usuarioId);
     
 }
