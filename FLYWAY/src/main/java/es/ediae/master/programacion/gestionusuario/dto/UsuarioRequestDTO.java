@@ -7,6 +7,7 @@ import java.time.LocalTime;
 
 public class UsuarioRequestDTO {
 
+    private Boolean esAdmin;
     private String nickUsuario;
     private String contrasena;
     private Integer generoId;
@@ -18,6 +19,14 @@ public class UsuarioRequestDTO {
     private Integer puestoDeTrabajoId;
 
     // Getters y Setters
+    public Boolean getEsAdmin() {
+        return esAdmin;
+    }    
+    
+    public void setEsAdmin(Boolean esAdmin) {
+        this.esAdmin = esAdmin;
+    }
+
     public String getNickUsuario() {
         return nickUsuario;
     }
@@ -71,8 +80,6 @@ public class UsuarioRequestDTO {
     }
     public void setPuestoDeTrabajoId(Integer puestoDeTrabajoId) {
         this.puestoDeTrabajoId = puestoDeTrabajoId;
-    }
-
-    
+    }    
     
 }

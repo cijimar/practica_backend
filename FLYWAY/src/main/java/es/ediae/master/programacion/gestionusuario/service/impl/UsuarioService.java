@@ -34,6 +34,7 @@ public class UsuarioService {
 
     UsuarioEntity usuario = new UsuarioEntity();
 
+    usuario.setEsAdmin(dto.getEsAdmin());
     usuario.setNickUsuario(dto.getNickUsuario());
     usuario.setContrasena(dto.getContrasena());
     usuario.setFechaHoraCreacion(LocalDateTime.now());
@@ -100,6 +101,7 @@ public class UsuarioService {
         }
 
         // Actualizar campos
+        usuario.setEsAdmin(dto.getEsAdmin());
         usuario.setNickUsuario(dto.getNickUsuario());
         usuario.setContrasena(dto.getContrasena());
         usuario.setNombre(dto.getNombre());

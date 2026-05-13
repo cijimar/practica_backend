@@ -12,6 +12,7 @@ public class UsuarioResponseDTO {
 
     private Integer id;
     private String nickUsuario;
+    private Boolean esAdmin;
     private LocalDateTime fechaHoraCreacion;
     private Integer generoId;
     private String generoNombre;
@@ -30,6 +31,14 @@ public class UsuarioResponseDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getEsAdmin() {
+        return esAdmin;
+    }
+
+    public void setEsAdmin(Boolean esAdmin) {
+        this.esAdmin = esAdmin;
     }
 
     public String getNickUsuario() {
@@ -127,6 +136,7 @@ public class UsuarioResponseDTO {
 
         dto.setId(entity.getId());
         dto.setNickUsuario(entity.getNickUsuario());
+        dto.setEsAdmin(entity.getEsAdmin());
         dto.setFechaHoraCreacion(entity.getFechaHoraCreacion());
 
         dto.setNombre(entity.getNombre());
@@ -148,12 +158,4 @@ public class UsuarioResponseDTO {
         return dto;
     }
 
-
-
-
-
-
-
-        
-    
 }
