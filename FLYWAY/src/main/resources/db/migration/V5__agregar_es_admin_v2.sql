@@ -1,0 +1,2 @@
+ALTER TABLE usuarios
+ADD COLUMN es_administrador BOOLEAN DEFAULT FALSE;

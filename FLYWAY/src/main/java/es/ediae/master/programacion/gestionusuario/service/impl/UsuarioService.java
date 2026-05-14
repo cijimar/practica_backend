@@ -14,6 +14,7 @@ import es.ediae.master.programacion.gestionusuario.entity.UsuarioEntity;
 import es.ediae.master.programacion.gestionusuario.repository.GeneroRepository;
 import es.ediae.master.programacion.gestionusuario.repository.PuestoDeTrabajoRepository;
 import es.ediae.master.programacion.gestionusuario.repository.UsuarioRepository;
+import es.ediae.master.programacion.gestionusuario.service.AuthService;
 
 @Service
 public class UsuarioService {
@@ -21,97 +22,81 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Añado estos dos autowired 
-
     @Autowired
     private GeneroRepository generoRepository;
 
     @Autowired
     private PuestoDeTrabajoRepository puestoDeTrabajoRepository;
-    
+
+    @Autowired
+    private AuthService authService;
+
     // CREATE
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO dto) {
-    
-    // VALIDACION ANTES DE CREACION: el nickUsuario debe ser único
-    if (usuarioRepository.existsByNickUsuario(dto.getNickUsuario())) {
-    throw new RuntimeException("Ya existe un usuario con ese nick");
+
+        if (usuarioRepository.existsByNickUsuario(dto.getNickUsuario())) {
+            throw new RuntimeException("Ya existe un usuario con ese nick");
+        }
+
+        UsuarioEntity usuario = new UsuarioEntity();
+
+        usuario.setEsAdmin(dto.getEsAdmin());
+        usuario.setNickUsuario(dto.getNickUsuario());
+        usuario.setContrasena(dto.getContrasena());
+        usuario.setFechaHoraCreacion(LocalDateTime.now());
+        usuario.setNombre(dto.getNombre());
+        usuario.setPrimerApellido(dto.getPrimerApellido());
+        usuario.setSegundoApellido(dto.getSegundoApellido());
+        usuario.setFechaNacimiento(dto.getFechaNacimiento());
+        usuario.setHoraDesayuno(dto.getHoraDesayuno());
+
+        GeneroEntity genero = generoRepository.findById(dto.getGeneroId())
+                .orElseThrow(() -> new RuntimeException("Genero no encontrado"));
+
+        usuario.setGenero(genero);
+
+        if (dto.getPuestoDeTrabajoId() != null) {
+            PuestoDeTrabajoEntity puesto = puestoDeTrabajoRepository.findById(dto.getPuestoDeTrabajoId())
+                    .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
+
+            usuario.setPuestoDeTrabajo(puesto);
+        }
+
+        UsuarioEntity guardado = usuarioRepository.save(usuario);
+
+        return UsuarioResponseDTO.fromEntity(guardado);
     }
 
-    UsuarioEntity usuario = new UsuarioEntity();
+    // READ ONE
 
-    usuario.setEsAdmin(dto.getEsAdmin());
-    usuario.setNickUsuario(dto.getNickUsuario());
-    usuario.setContrasena(dto.getContrasena());
-    usuario.setFechaHoraCreacion(LocalDateTime.now());
-    usuario.setNombre(dto.getNombre());
-    usuario.setPrimerApellido(dto.getPrimerApellido());
-    usuario.setSegundoApellido(dto.getSegundoApellido());
-    usuario.setFechaNacimiento(dto.getFechaNacimiento());
-    usuario.setHoraDesayuno(dto.getHoraDesayuno());
-
-    // GENERO (obligatorio)
-    GeneroEntity genero = generoRepository.findById(dto.getGeneroId())
-        .orElseThrow(() -> new RuntimeException("Genero no encontrado"));
-
-    usuario.setGenero(genero);
-
-    // PUESTO (opcional)
-    if (dto.getPuestoDeTrabajoId() != null) {
-        PuestoDeTrabajoEntity puesto = puestoDeTrabajoRepository
-            .findById(dto.getPuestoDeTrabajoId())
-            .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
-
-        usuario.setPuestoDeTrabajo(puesto);
-    }
-
-    UsuarioEntity guardado = usuarioRepository.save(usuario);
-
-    return UsuarioResponseDTO.fromEntity(guardado);
-    }
-
-
-    // READ (un usuario)
     public UsuarioResponseDTO obtenerUsuarioPorId(Integer id) {
 
-        UsuarioEntity usuario = usuarioRepository.findById(id)
-                .orElse(null);
-
-        if (usuario == null) {
-            return null;
-        }
+        UsuarioEntity usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         return UsuarioResponseDTO.fromEntity(usuario);
     }
 
-
-    // READ (todos los usuarios)
+    // READ ALL
     public List<UsuarioResponseDTO> obtenerTodosLosUsuarios() {
 
-        List<UsuarioEntity> usuarios = usuarioRepository.findAll();
-
-        return usuarios.stream()
-                .map(UsuarioResponseDTO::fromEntity)
-                .toList();
+        return usuarioRepository.findAll()
+            .stream()
+            .map(UsuarioResponseDTO::fromEntity)
+            .toList();
     }
-
 
     // UPDATE
     public UsuarioResponseDTO actualizarUsuario(Integer id, UsuarioRequestDTO dto) {
 
-        UsuarioEntity usuario = usuarioRepository.findById(id).orElse(null);
-        
-        if (usuario == null) {
-            return null;
+        UsuarioEntity usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // VALIDAR NICK SOLO SI CAMBIA
+        if (!usuario.getNickUsuario().equals(dto.getNickUsuario())
+                && usuarioRepository.existsByNickUsuario(dto.getNickUsuario())) {
+            throw new RuntimeException("Ya existe un usuario con ese nick");
         }
 
-        // SE COMPRUEBA ANTES SI EL USUARIO EXISTE Y DESPUES SE VALIDA EL NICK: el nickUsuario debe ser único
-        if (usuarioRepository.existsByNickUsuarioAndIdNot(dto.getNickUsuario(), id)) {
-        throw new RuntimeException("Ya existe un usuario con ese nick");
-        }
-
-
-
-        // Actualizar campos
         usuario.setEsAdmin(dto.getEsAdmin());
         usuario.setNickUsuario(dto.getNickUsuario());
         usuario.setContrasena(dto.getContrasena());
@@ -121,32 +106,18 @@ public class UsuarioService {
         usuario.setFechaNacimiento(dto.getFechaNacimiento());
         usuario.setHoraDesayuno(dto.getHoraDesayuno());
 
-        UsuarioEntity actualizada = usuarioRepository.save(usuario);
-
-        return UsuarioResponseDTO.fromEntity(actualizada);
+        return UsuarioResponseDTO.fromEntity(usuarioRepository.save(usuario));
     }
-
 
     // DELETE
     public void eliminarUsuario(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
-
-    // INICIAR SESION
+    // LOGIN
     public boolean iniciarSesion(String nickUsuario, String contrasena) {
-
-    UsuarioEntity usuario = usuarioRepository.findByNickUsuario(nickUsuario);
-
-    if (usuario == null) {
-        return false;
-    }
-
-    if (!usuario.getContrasena().equals(contrasena)) {
-        return false;
-    }
-
-    return true;
-    }    
-    
+        return usuarioRepository.findByNickUsuario(nickUsuario)
+            .map(u -> u.getContrasena().equals(contrasena))
+            .orElse(false);
+}
 }
