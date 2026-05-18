@@ -1,4 +1,4 @@
-package es.ediae.master.programacion.gestionusuario.controller;
+/*package es.ediae.master.programacion.gestionusuario.controller;
 
 import es.ediae.master.programacion.gestionusuario.constant.GeneralConstant;
 import org.springframework.ui.ModelMap;
@@ -24,4 +24,4 @@ public class GeneralControllerUtils {
     //    return ResponseEntity.status(httpStatus).body(data);
     //}
 
-}
+}*/

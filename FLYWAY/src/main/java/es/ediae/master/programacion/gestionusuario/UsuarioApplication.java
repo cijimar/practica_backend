@@ -7,9 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @OpenAPIDefinition(
 		info = @Info(
-				title = "API de Productos",
+				title = "API Práctica Backend",
 				version = "1.9x",
-				description = "Mi Documentación manual no generada con Swagger"
+				description = "Documentación manual de la API REST para la práctica final de Backend. " +
+						"Esta API se encarga de gestionar los usuarios, incluyendo operaciones CRUD y autenticación."
 		)
 )
 @SpringBootApplication

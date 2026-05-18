@@ -11,6 +11,7 @@ import es.ediae.master.programacion.gestionusuario.dto.UsuarioResponseDTO;
 import es.ediae.master.programacion.gestionusuario.service.AuthService;
 import es.ediae.master.programacion.gestionusuario.service.impl.UsuarioService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1")
 public class UsuarioController {
