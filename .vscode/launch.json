@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-UsuarioApplication<es.ediae.master.programacion.gestionusuario-usuarios>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "es.ediae.master.programacion.gestionusuario.UsuarioApplication",
+            "projectName": "es.ediae.master.programacion.gestionusuario-usuarios",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
