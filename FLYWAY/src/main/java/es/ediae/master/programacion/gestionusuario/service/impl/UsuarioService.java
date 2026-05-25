@@ -11,10 +11,12 @@ import es.ediae.master.programacion.gestionusuario.dto.UsuarioResponseDTO;
 import es.ediae.master.programacion.gestionusuario.entity.GeneroEntity;
 import es.ediae.master.programacion.gestionusuario.entity.PuestoDeTrabajoEntity;
 import es.ediae.master.programacion.gestionusuario.entity.UsuarioEntity;
+import es.ediae.master.programacion.gestionusuario.repository.DireccionRepository;
 import es.ediae.master.programacion.gestionusuario.repository.GeneroRepository;
 import es.ediae.master.programacion.gestionusuario.repository.PuestoDeTrabajoRepository;
 import es.ediae.master.programacion.gestionusuario.repository.UsuarioRepository;
 import es.ediae.master.programacion.gestionusuario.service.AuthService;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioService {
@@ -30,6 +32,9 @@ public class UsuarioService {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private DireccionRepository direccionRepository;
 
     // CREATE
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO dto) {
@@ -68,7 +73,6 @@ public class UsuarioService {
     }
 
     // READ ONE
-
     public UsuarioResponseDTO obtenerUsuarioPorId(Integer id) {
 
         UsuarioEntity usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -110,7 +114,10 @@ public class UsuarioService {
     }
 
     // DELETE
+    @Transactional
     public void eliminarUsuario(Integer id) {
+        direccionRepository.deleteByUsuarioId(id);
+        direccionRepository.flush();
         usuarioRepository.deleteById(id);
     }
 
